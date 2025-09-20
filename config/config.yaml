@@ -1,0 +1,13 @@
+twitter:
+  api_key: "p4IIGiDdFIImY3Ns4cTQG40No"
+  api_secret: "4fhTV1ItuJvyuP6WVCrCIjnTEwX7vMWkGp5goLqgK9VQVAcFlp"
+  access_token: "1900055563360493568-MZKezKYxJYnWWcW3kGMe41vxxutRj8"
+  access_token_secret: "69XMR1AxD0u2l4WGw8wWHzMZgIB7vRTZMsawbO4XTcma4"
+  bearer_token: "AAAAAAAAAAAAAAAAAAAAADsq4QEAAAAAIYMPRFqblIYSlqaNHUmsP8QPPCE%3Dqdy7ofNTzHTjHf3xskQdH4kZF8ySLW7AWKsZUVQ8z0rPDHM1Iu"
+
+bot:
+  username: "fsociety_403"  # Your bot's Twitter username (without @)
+  check_interval: 60  # Check for mentions every 60 seconds
+
+factcheck:
+  confidence_threshold: 0.7  # Minimum confidence to make a definitive claim

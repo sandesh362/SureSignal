@@ -1,0 +1,28 @@
+2025-09-20 17:30:57,936 - INFO - Bot initialized as @fsociety_403
+2025-09-20 17:30:57,938 - INFO - Monitoring mentions of @fsociety_403
+2025-09-20 17:30:57,938 - INFO - Checking for new mentions...
+2025-09-20 17:30:58,291 - INFO - No new mentions found
+2025-09-20 17:30:58,291 - INFO - Waiting 60 seconds before next check...
+2025-09-20 17:31:08,353 - INFO - Bot stopped by user
+2025-09-20 17:32:16,233 - INFO - Bot initialized as @fsociety_403
+2025-09-20 17:32:16,234 - INFO - Monitoring mentions of @fsociety_403
+2025-09-20 17:32:16,235 - INFO - Checking for new mentions...
+2025-09-20 17:32:16,591 - INFO - No new mentions found
+2025-09-20 17:32:16,591 - INFO - Waiting 60 seconds before next check...
+2025-09-20 17:33:16,592 - INFO - Checking for new mentions...
+2025-09-20 17:33:16,869 - WARNING - Rate limit exceeded. Sleeping for 841 seconds.
+2025-09-20 17:34:48,424 - INFO - Bot stopped by user
+2025-09-20 17:35:30,267 - INFO - Twitter API connection successful
+2025-09-20 17:35:30,267 - INFO - Bot initialized as @fsociety_403
+2025-09-20 17:35:30,267 - INFO - Fact-checking bot started
+2025-09-20 17:35:30,267 - INFO - Monitoring mentions of @fsociety_403
+2025-09-20 17:35:30,268 - INFO - Checking for new mentions...
+2025-09-20 17:35:30,599 - WARNING - Rate limit exceeded. Sleeping for 629 seconds.
+2025-09-20 17:35:51,771 - INFO - Bot stopped by user
+2025-09-20 17:41:49,183 - INFO - Twitter API connection successful
+2025-09-20 17:41:49,184 - INFO - Bot initialized as @fsociety_403
+2025-09-20 17:41:49,184 - INFO - Fact-checking bot started
+2025-09-20 17:41:49,185 - INFO - Monitoring mentions of @fsociety_403
+2025-09-20 17:41:49,185 - INFO - Checking for new mentions...
+2025-09-20 17:41:49,511 - WARNING - Rate limit exceeded. Sleeping for 250 seconds.
+2025-09-20 17:41:56,327 - INFO - Bot stopped by user
