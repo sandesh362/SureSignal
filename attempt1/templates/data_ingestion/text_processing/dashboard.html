@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block title %}Text Processing - Misinformation Detection{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="fas fa-cog"></i> Text Processing
+        </h1>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <!-- Processing Stats -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-bar"></i> Processing Statistics</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h4>{{ processed_tweets }}/{{ total_tweets }}</h4>
+                        <p class="text-muted">Tweets Processed</p>
+                        <div class="progress mb-2">
+                            <div class="progress-bar" style="width: {% widthratio processed_tweets total_tweets 100 %}%"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <h4>{{ processed_articles }}/{{ total_articles }}</h4>
+                        <p class="text-muted">Articles Processed</p>
+                        <div class="progress mb-2">
+                            <div class="progress-bar bg-success" style="width: {% widthratio processed_articles total_articles 100 %}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processing Controls -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-play"></i> Processing Controls</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary" onclick="processTweets()">
+                        <i class="fab fa-twitter"></i> Process Tweets ({{ unprocessed_tweets }} pending)
+                    </button>
+                    <button class="btn btn-success" onclick="processArticles()">
+                        <i class="fas fa-newspaper"></i> Process Articles ({{ unprocessed_articles }} pending)
+                    </button>
+                    <button class="btn btn-info" onclick="processAll()">
+                        <i class="fas fa-cogs"></i> Process All
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-info-circle"></i> Processing Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Processing Steps:</h6>
+                        <ul>
+                            <li>Text normalization and lowercasing</li>
+                            <li>URL and mention removal</li>
+                            <li>Special character cleanup</li>
+                            <li>Stopword removal</li>
+                            {% if spacy_available %}
+                            <li>Lemmatization (spaCy enabled)</li>
+                            {% else %}
+                            <li>Basic word filtering (spaCy not available)</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>System Status:</h6>
+                        <ul>
+                            <li>NLTK: <span class="badge bg-success">Available</span></li>
+                            <li>spaCy: 
+                                {% if spacy_available %}
+                                <span class="badge bg-success">Available</span>
+                                {% else %}
+                                <span class="badge bg-warning">Not Available</span>
+                                {% endif %}
+                            </li>
+                        </ul>
+                        {% if not spacy_available %}
+                        <div class="alert alert-info small mt-2">
+                            Install spaCy for better text processing:<br>
+                            <code>python -m spacy download en_core_web_sm</code>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function processTweets() {
+    processData('/api/v1/processing/tweets/', 'Tweets');
+}
+
+function processArticles() {
+    processData('/api/v1/processing/articles/', 'Articles');
+}
+
+function processAll() {
+    processData('/api/v1/processing/all/', 'All data');
+}
+
+function processData(url, type) {
+    if (confirm(`Start processing ${type}? This may take a few minutes.`)) {
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(`${type} processing completed!`);
+            location.reload();
+        })
+        .catch(error => {
+            alert('Error: ' + error);
+        });
+    }
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endblock %>

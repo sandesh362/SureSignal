@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Data Ingestion - Misinformation Detection{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="fas fa-download"></i> Data Ingestion
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fab fa-twitter"></i> Twitter Collection</h5>
+            </div>
+            <div class="card-body">
+                {% if twitter_configured %}
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> Twitter API configured
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i> Twitter API not configured
+                    </div>
+                {% endif %}
+                
+                <form id="twitter-form">
+                    <div class="mb-3">
+                        <label for="twitter-query" class="form-label">Search Query:</label>
+                        <input type="text" class="form-control" id="twitter-query" 
+                               value="misinformation OR fake news">
+                    </div>
+                    <div class="mb-3">
+                        <label for="twitter-count" class="form-label">Max Results:</label>
+                        <input type="number" class="form-control" id="twitter-count" 
+                               value="10" min="1" max="100">
+                    </div>
+                    <button type="submit" class="btn btn-primary" 
+                            {% if not twitter_configured %}disabled{% endif %}>
+                        <i class="fas fa-download"></i> Collect Tweets
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-newspaper"></i> News Collection</h5>
+            </div>
+            <div class="card-body">
+                {% if news_configured %}
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> News API configured
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i> News API not configured
+                    </div>
+                {% endif %}
+                
+                <form id="news-form">
+                    <div class="mb-3">
+                        <label for="news-query" class="form-label">Search Query:</label>
+                        <input type="text" class="form-control" id="news-query" 
+                               value="misinformation OR fake news">
+                    </div>
+                    <div class="mb-3">
+                        <label for="news-count" class="form-label">Page Size:</label>
+                        <input type="number" class="form-control" id="news-count" 
+                               value="5" min="1" max="100">
+                    </div>
+                    <button type="submit" class="btn btn-success" 
+                            {% if not news_configured %}disabled{% endif %}>
+                        <i class="fas fa-download"></i> Collect News
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-list"></i> Collection History</h5>
+            </div>
+            <div class="card-body">
+                <div id="collection-log" class="border rounded p-3" 
+                     style="height: 200px; overflow-y: auto; background-color: #f8f9fa;">
+                    <p class="text-muted">Collection logs will appear here...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

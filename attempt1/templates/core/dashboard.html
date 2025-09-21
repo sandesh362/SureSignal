@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Misinformation Detection{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+        </h1>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <!-- Tweets Stats Card -->
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ total_tweets }}</h4>
+                        <p class="card-text">Total Tweets</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fab fa-twitter fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Articles Stats Card -->
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ total_articles }}</h4>
+                        <p class="card-text">Total Articles</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-newspaper fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processed Tweets Card -->
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ processed_tweets }}</h4>
+                        <p class="card-text">Processed Tweets</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processed Articles Card -->
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ processed_articles }}</h4>
+                        <p class="card-text">Processed Articles</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-cog fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Quick Actions -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-bolt"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary" onclick="collectData()">
+                        <i class="fas fa-download"></i> Collect New Data
+                    </button>
+                    <button class="btn btn-success" onclick="processText()">
+                        <i class="fas fa-cog"></i> Process Text
+                    </button>
+                    <a href="/admin/" class="btn btn-secondary">
+                        <i class="fas fa-tools"></i> Admin Panel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Status -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-heartbeat"></i> System Status</h5>
+            </div>
+            <div class="card-body">
+                <div id="system-status">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Database Connection:</span>
+                        <span class="badge bg-success">Connected</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Twitter API:</span>
+                        <span class="badge bg-secondary" id="twitter-status">Checking...</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>News API:</span>
+                        <span class="badge bg-secondary" id="news-status">Checking...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function collectData() {
+    if (confirm('Start data collection? This may take a few minutes.')) {
+        fetch('/api/v1/ingestion/all/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                query: 'misinformation OR fake news',
+                max_results: 10,
+                page_size: 5
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Data collection completed!');
+            location.reload();
+        })
+        .catch(error => {
+            alert('Error: ' + error);
+        });
+    }
+}
+
+function processText() {
+    if (confirm('Start text processing? This may take a few minutes.')) {
+        fetch('/api/v1/processing/all/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Text processing completed!');
+            location.reload();
+        })
+        .catch(error => {
+            alert('Error: ' + error);
+        });
+    }
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Check API status on page load
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/status/')
+        .then(response => response.json())
+        .then(data => {
+            // Update status indicators based on response
+            console.log('System status:', data);
+        })
+        .catch(error => {
+            console.error('Error checking status:', error);
+        });
+});
+</script>
+{% endblock %}
